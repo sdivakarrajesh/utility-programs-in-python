@@ -1,6 +1,6 @@
 import re
 str = input()
-pattern = r"([\w\.-]+)@([\w\.=]+)(\.[\w\.]+)"
+pattern = r"([\w\.\d-]+)@([\w\.=]+)(\.[\w\.]+)"
 match = re.match(pattern,str)
 if match:
 	print("Entered email is Valid")
