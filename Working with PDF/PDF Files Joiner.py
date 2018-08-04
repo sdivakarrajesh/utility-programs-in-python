@@ -9,7 +9,7 @@ def getProperFileName(strToPrint):
 		print(name)
 		nonAcceptedFileNameChar = ['/','\\',';','*','?','\"','<','>','|']
 		if any(letter in nonAcceptedFileNameChar for letter in name):
-			print("File Name cannot contain /\\;*?\"<>|")
+			print("File Name cannot contain /\\;*?\"<>|.. Retry ")
 			continue
 		else:
 			break
