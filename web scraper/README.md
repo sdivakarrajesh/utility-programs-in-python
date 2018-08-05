@@ -8,7 +8,9 @@ BeautifulSoup is the one that we will be using to scrape and parse through the h
 Assuming that you have python and pip installed, install BeautifulSoup by opening the terminal and
 
     pip3 install bs4
+
 or
+
     pip install bs4
 
 (depending on the python package manager that you've installed on your system)
