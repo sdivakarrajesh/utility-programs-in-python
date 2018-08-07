@@ -6,6 +6,8 @@ def getProperFileName(strToPrint):
 		if len(name)>4:
 			if name[-1:-4:-1]!='.pdf':
 				name = name + '.pdf'
+		else:
+			name = name + '.pdf'
 		print(name)
 		nonAcceptedFileNameChar = ['/','\\',';','*','?','\"','<','>','|']
 		if any(letter in nonAcceptedFileNameChar for letter in name):
