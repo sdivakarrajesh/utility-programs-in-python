@@ -35,3 +35,8 @@ while True and len(extensions)>0:
 
 if not found: print("You might have entered a wrong name. Try Again!")
 else: print(imgFile.size)
+width, height = input("Enter the resolution to resize: ").lower().strip().split("x")
+finalName = input("Enter the new name to save the image: ")
+extension = input("Enter the File Format in which you would like to save the image: ")
+finalImage = imgFile.resize((int(width),int(height)),Image.ANTIALIAS)
+finalImage.save(finalName+'.'+extension)
