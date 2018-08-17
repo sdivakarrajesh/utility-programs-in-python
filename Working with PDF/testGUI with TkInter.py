@@ -1,13 +1,14 @@
 from tkinter import *
 from TkinterDnD2 import *
 from tkinter.filedialog import askopenfilename
-
+import PyPDF2
 class Application(Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.pack()
         self.create_widgets()
         self.create_drop_files_here()
+
     def create_drop_files_here(self):
         self.entry_sv = StringVar()
         self.entry_sv.set('Drop Files Here...')
@@ -21,11 +22,11 @@ class Application(Frame):
         self.hi_there["text"] = "Choose a File"
         self.hi_there["command"] = self.add_fileChooser
         self.hi_there.pack(side="top")
-
-        self.quit = Button(self, text="QUIT", fg="red",
-                              command=root.destroy)
-        self.quit.pack(side="bottom")
         self.file_list = []
+        self.joinFiles = Button(self, text="Join",
+                              command=self.joinPDFs)
+        self.joinFiles.pack(side="bottom")
+
 
     def add_fileChooser(self):
         Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
@@ -47,11 +48,42 @@ class Application(Frame):
         #print(str(event.data).replace("}","").replace("{",""))
         print(event.data)
 
+    def joinPDFs(self):
+        count = len(self.file_list)
+        pdfWriter = PyPDF2.PdfFileWriter()
+        finalName = self.getProperFileName("Enter Final PDF Name:")
+        pdfOutputFile = open(finalName,'wb')
+        for i in self.file_list:
+        	name = i
+        	pdfFile = open(name,'rb')
+        	pdfReader = PyPDF2.PdfFileReader(pdfFile)
+        	for pageNum in range(pdfReader.numPages):
+        		pageObj = pdfReader.getPage(pageNum)
+        		pdfWriter.addPage(pageObj)
+        	pdfOutputFile = open(finalName,'ab')
+        	pdfWriter.write(pdfOutputFile)
+        	pdfFile.close()
+        pdfOutputFile.close()
+
+    def getProperFileName(self,strToPrint):
+    	name = ''
+    	while True:
+    		name = input(strToPrint)
+    		if len(name)>4:
+    			if name[-1:-4:-1]!='.pdf':
+    				name = name + '.pdf'
+    		else:
+    			name = name + '.pdf'
+    		print(name)
+    		nonAcceptedFileNameChar = ['/','\\',';','*','?','\"','<','>','|']
+    		if any(letter in nonAcceptedFileNameChar for letter in name):
+    			print("File Name cannot contain /\\;*?\"<>|.. Retry ")
+    			continue
+    		else:
+    			break
+    	return name
 root = TkinterDnD.Tk()
 app = Application(master=root)
 app.master.title("My PDF joiner")
 app.master.geometry("250x250")
-
-
-
 app.mainloop()

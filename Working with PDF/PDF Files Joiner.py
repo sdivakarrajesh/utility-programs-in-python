@@ -31,5 +31,4 @@ for i in range(count):
 	pdfOutputFile = open(finalName,'ab')
 	pdfWriter.write(pdfOutputFile)
 	pdfFile.close()
-
 pdfOutputFile.close()
