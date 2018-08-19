@@ -32,38 +32,59 @@ class Application(Frame):
         Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
         filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
         print(filename)
-        self.file_list.append(filename)
-        onlyName = filename.split("/")[-1]
-        self.label = Label(text=onlyName, fg="black")
-        self.label.pack(side="bottom")
-        self.remove = Button(self, text="remove", fg="red", command=self.remove_file)
-        self.remove.pack(side="left")
+        if filename!="" and filename!=None:
+            self.file_list.append(filename)
+            onlyName = filename.split("/")[-1]
+            frame = Frame(self)
+            self.label = Label(frame,text=onlyName, fg="black")
+            #self.label.pack(side=LEFT,fill=Y)
+            self.remove = Button(frame, text="remove", fg="red", command=self.remove_file)
+            #self.remove.pack(side=LEFT,fill=Y)
+            frame.pack()
+            self.label.pack(side=LEFT,fill=Y)
+            self.remove.pack(side=RIGHT,fill=Y)
 
     def remove_file(self):
         print("test")
 
     def drop(self,event):
-        #self.entry_sv.set(list(event.data))
-        print(type(event))
-        #print(str(event.data).replace("}","").replace("{",""))
-        print(event.data)
+        self.returnedFilePaths = event.data
+        self.filePaths()
+    def filePaths(self):
+        curr = self.returnedFilePaths[1:-1]
+        list = curr.split("} {")
+        self.file_list = self.file_list+list
+        print(list)
+
+        for i in list:
+            frame = Frame(self)
+            onlyName = i.split("/")[-1]
+            label = Label(frame,text=onlyName,fg="black")
+            remove = Button(frame,text="remove",fg="red",command=self.remove_file)
+            frame.pack()
+            label.pack(side=LEFT,fill=Y)
+            remove.pack(side=RIGHT,fill=Y)
 
     def joinPDFs(self):
-        count = len(self.file_list)
-        pdfWriter = PyPDF2.PdfFileWriter()
-        finalName = self.getProperFileName("Enter Final PDF Name:")
-        pdfOutputFile = open(finalName,'wb')
-        for i in self.file_list:
-        	name = i
-        	pdfFile = open(name,'rb')
-        	pdfReader = PyPDF2.PdfFileReader(pdfFile)
-        	for pageNum in range(pdfReader.numPages):
-        		pageObj = pdfReader.getPage(pageNum)
-        		pdfWriter.addPage(pageObj)
-        	pdfOutputFile = open(finalName,'ab')
-        	pdfWriter.write(pdfOutputFile)
-        	pdfFile.close()
-        pdfOutputFile.close()
+        try:
+            count = len(self.file_list)
+            pdfWriter = PyPDF2.PdfFileWriter()
+            finalName = self.getProperFileName("Enter Final PDF Name:")
+            pdfOutputFile = open(finalName,'wb')
+            for i in self.file_list:
+                name = i
+                pdfFile = open(name,'rb')
+                print("Joining "+i)
+                pdfReader = PyPDF2.PdfFileReader(pdfFile, strict=False)
+                for pageNum in range(pdfReader.numPages):
+            	    pageObj = pdfReader.getPage(pageNum)
+            	    pdfWriter.addPage(pageObj)
+                pdfOutputFile = open(finalName,'ab')
+                pdfWriter.write(pdfOutputFile)
+                pdfFile.close()
+            pdfOutputFile.close()
+        except:
+            pass
 
     def getProperFileName(self,strToPrint):
     	name = ''
