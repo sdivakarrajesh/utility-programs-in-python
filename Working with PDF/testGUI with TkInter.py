@@ -2,6 +2,7 @@ from tkinter import *
 from TkinterDnD2 import *
 from tkinter.filedialog import askopenfilename
 import PyPDF2
+from tkinter import messagebox
 class Application(Frame):
     def __init__(self, master=None):
         super().__init__(master)
@@ -18,10 +19,10 @@ class Application(Frame):
         self.entry.dnd_bind('<<Drop>>', self.drop)
 
     def create_widgets(self):
-        self.hi_there = Button(self)
-        self.hi_there["text"] = "Choose a File"
-        self.hi_there["command"] = self.add_fileChooser
-        self.hi_there.pack(side="top")
+        self.file_chooser = Button(self)
+        self.file_chooser["text"] = "Choose a File"
+        self.file_chooser["command"] = self.add_fileChooser
+        self.file_chooser.pack(side="top")
         self.file_list = []
         self.joinFiles = Button(self, text="Join",
                               command=self.joinPDFs)
@@ -85,6 +86,8 @@ class Application(Frame):
             pdfOutputFile.close()
         except:
             pass
+        messagebox.showinfo("My PDF Joiner", "        Done!        ")
+
 
     def getProperFileName(self,strToPrint):
     	name = ''
