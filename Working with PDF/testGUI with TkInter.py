@@ -1,6 +1,6 @@
 from tkinter import *
 from TkinterDnD2 import *
-from tkinter.filedialog import askopenfilename
+from tkinter.filedialog import askopenfilename,asksaveasfilename
 import PyPDF2
 from tkinter import messagebox
 class Application(Frame):
@@ -70,7 +70,8 @@ class Application(Frame):
         try:
             count = len(self.file_list)
             pdfWriter = PyPDF2.PdfFileWriter()
-            finalName = self.getProperFileName("Enter Final PDF Name:")
+            #finalName = self.getProperFileName("Enter Final PDF Name:")
+            finalName = asksaveasfilename(defaultextension=".pdf", filetypes=(("PDF", "*.pdf"),("All Files", "*.*") ))
             pdfOutputFile = open(finalName,'wb')
             for i in self.file_list:
                 name = i
@@ -84,8 +85,9 @@ class Application(Frame):
                 pdfWriter.write(pdfOutputFile)
                 pdfFile.close()
             pdfOutputFile.close()
-        except:
-            pass
+        except Exception as e:
+            print(e)
+            #pass
         messagebox.showinfo("My PDF Joiner", "        Done!        ")
 
 
