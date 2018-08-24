@@ -90,24 +90,6 @@ class Application(Frame):
             #pass
         messagebox.showinfo("My PDF Joiner", "        Done!        ")
 
-
-    def getProperFileName(self,strToPrint):
-    	name = ''
-    	while True:
-    		name = input(strToPrint)
-    		if len(name)>4:
-    			if name[-1:-4:-1]!='.pdf':
-    				name = name + '.pdf'
-    		else:
-    			name = name + '.pdf'
-    		print(name)
-    		nonAcceptedFileNameChar = ['/','\\',';','*','?','\"','<','>','|']
-    		if any(letter in nonAcceptedFileNameChar for letter in name):
-    			print("File Name cannot contain /\\;*?\"<>|.. Retry ")
-    			continue
-    		else:
-    			break
-    	return name
 root = TkinterDnD.Tk()
 app = Application(master=root)
 app.master.title("My PDF joiner")
