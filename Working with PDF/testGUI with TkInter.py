@@ -7,23 +7,28 @@ class Application(Frame):
 
     def __init__(self, master=None):
         super().__init__(master)
-        self.pack()
+        self.grid()
         self.create_widgets()
         self.create_drop_files_here()
         self.create_list_box()
 
     def create_list_box(self):
         self.lb = Listbox(width = 35)
-        Scrollbar(self.lb, orient="vertical")
-        Scrollbar(self.lb, orient="horizontal")
+        self.removeBtn = Button(text=" Remove ",command=self.remove_file())
+        self.removeBtn.grid(row=1,column=1,pady=5,padx=5,sticky=N)
+        self.moveUpBtn = Button(text=" Move Up ",command = self.move_up())
+        self.moveUpBtn.grid(row=1,column=1,pady=5,padx=5,sticky=S)
         self.count = 1
-        self.lb.pack()
+        self.lb.grid(row=1)
+
+    def move_up(self):
+        print('test')
 
     def create_drop_files_here(self):
         self.entry_sv = StringVar()
         self.entry_sv.set('Drop Files Here...')
         self.entry = Entry(root, textvar=self.entry_sv, width=35)
-        self.entry.pack(side="bottom", padx=5, pady=5)
+        self.entry.grid(row=98, padx=5, pady=5)
         self.entry.drop_target_register(DND_FILES)
         self.entry.dnd_bind('<<Drop>>', self.drop)
 
@@ -32,13 +37,11 @@ class Application(Frame):
         self.file_chooser["text"] = " Choose a File "
         self.file_chooser["command"] = self.add_fileChooser
         label = Label(self,text="Choose PDFs to join: ",fg="black")
-        label.pack(side=LEFT,padx=5,pady=5)
-        self.file_chooser.pack(side=RIGHT,pady=5)
+        label.grid(row=0,column=0,padx=5,pady=5)
+        self.file_chooser.grid(row=0,column=1,pady=5)
         self.file_list = []
-        frame = Frame(root)
-        frame.pack(side="bottom",pady=10)
-        self.joinFiles = Button(frame, text="   Join   ",command=self.joinPDFs)
-        self.joinFiles.pack(side=RIGHT)
+        self.joinFiles = Button(text="     Join     ",command=self.joinPDFs)
+        self.joinFiles.grid(row=99,column=1)
 
     def add_fileChooser(self):
         Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
