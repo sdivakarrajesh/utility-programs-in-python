@@ -97,5 +97,6 @@ class Application(Frame):
 root = TkinterDnD.Tk()
 app = Application(master=root)
 app.master.title("My PDF joiner")
-app.master.geometry("300x300")
+app.master.geometry("300x275")
+root.resizable(False,True)
 app.mainloop()
