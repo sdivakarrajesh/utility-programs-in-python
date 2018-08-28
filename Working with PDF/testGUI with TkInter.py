@@ -22,7 +22,17 @@ class Application(Frame):
         self.lb.grid(row=1)
 
     def move_up(self):
-        print('test')
+        fileSelected = self.lb.get(ACTIVE)
+        ind = self.lb.get(0, "end").index(fileSelected)
+        print("File Selected" + fileSelected)
+        print("index :", ind)
+        if ind!=0:
+            curr= self.file_list.pop(ind)
+            self.file_list.insert(ind-1,curr)
+            self.lb.insert(ind-1,fileSelected)
+            self.lb.delete(ind+1)
+            self.lb.select_set(ind-1)
+
 
     def create_drop_files_here(self):
         self.entry_sv = StringVar()
