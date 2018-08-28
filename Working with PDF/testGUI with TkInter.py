@@ -14,9 +14,9 @@ class Application(Frame):
 
     def create_list_box(self):
         self.lb = Listbox(width = 35)
-        self.removeBtn = Button(text=" Remove ",command=self.remove_file())
+        self.removeBtn = Button(text=" Remove ",command=self.remove_file)
         self.removeBtn.grid(row=1,column=1,pady=5,padx=5,sticky=N)
-        self.moveUpBtn = Button(text=" Move Up ",command = self.move_up())
+        self.moveUpBtn = Button(text=" Move Up ",command = self.move_up)
         self.moveUpBtn.grid(row=1,column=1,pady=5,padx=5,sticky=S)
         self.count = 1
         self.lb.grid(row=1)
@@ -54,7 +54,12 @@ class Application(Frame):
             self.lb.insert(self.count,onlyName)
 
     def remove_file(self):
-        print("test")
+        fileSelected =self.lb.get(ACTIVE)
+        ind = self.lb.get(0, "end").index(fileSelected)
+        print("File Selected"+fileSelected)
+        print("index :",ind)
+        self.file_list.pop(ind)
+        self.lb.delete(ind)
 
     def drop(self,event):
         self.returnedFilePaths = event.data
