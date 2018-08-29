@@ -9,17 +9,18 @@ class Application(Frame):
         super().__init__(master)
         self.grid()
         self.create_widgets()
-        self.create_drop_files_here()
         self.create_list_box()
 
     def create_list_box(self):
         self.lb = Listbox(width = 35)
+        self.lb.drop_target_register(DND_FILES)
+        self.lb.dnd_bind('<<Drop>>', self.drop)
         self.removeBtn = Button(text=" Remove ",command=self.remove_file)
         self.removeBtn.grid(row=1,column=1,pady=5,padx=5,sticky=N)
         self.moveUpBtn = Button(text=" Move Up ",command = self.move_up)
         self.moveUpBtn.grid(row=1,column=1,pady=5,padx=5,sticky=S)
         self.count = 1
-        self.lb.grid(row=1)
+        self.lb.grid(row=1,padx=10,pady=10,rowspan=4)
 
     def move_up(self):
         fileSelected = self.lb.get(ACTIVE)
@@ -31,16 +32,10 @@ class Application(Frame):
             self.file_list.insert(ind-1,curr)
             self.lb.insert(ind-1,fileSelected)
             self.lb.delete(ind+1)
-            self.lb.select_set(ind-1)
-
-
-    def create_drop_files_here(self):
-        self.entry_sv = StringVar()
-        self.entry_sv.set('Drop Files Here...')
-        self.entry = Entry(root, textvar=self.entry_sv, width=35)
-        self.entry.grid(row=98, padx=5, pady=5)
-        self.entry.drop_target_register(DND_FILES)
-        self.entry.dnd_bind('<<Drop>>', self.drop)
+            self.lb.selection_clear(ind)
+            self.lb.selection_set(ind-1)
+            self.lb.activate(ind-1)
+            #self.lb.event_generate("<<ListboxSelect>>")
 
     def create_widgets(self):
         self.file_chooser = Button(self)
@@ -112,6 +107,6 @@ class Application(Frame):
 root = TkinterDnD.Tk()
 app = Application(master=root)
 app.master.title("My PDF joiner")
-app.master.geometry("300x275")
+app.master.geometry("325x275")
 root.resizable(False,True)
 app.mainloop()
