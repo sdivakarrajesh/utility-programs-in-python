@@ -8,19 +8,20 @@ class Application(Frame):
 		super().__init__(master)
 		self.option = IntVar()
 		self.create_widgets()
+		self.create_list_box()
 
 	def create_widgets(self):
 		option1 = Radiobutton(text="PreDefined Resolutions",variable=self.option,value=1,command=self.perspective)
 		option1.select()
 		self.option.set(1)
 		option2 = Radiobutton(text="Custom Resolutions", variable=self.option, value=2,command=self.perspective)
-		option1.grid(row=0,column=1,padx=10, pady=5,sticky=W)
-		option2.grid(row=2,column=1,padx=10, pady=5,sticky=W)
+		option1.grid(row=0,column=0,padx=10, pady=5,sticky=W)
+		option2.grid(row=2,column=0,padx=10, pady=5,sticky=W)
 		self.box = ttk.Combobox(root)
 		self.box['values'] = ("320x240","640X480","600x600","800x600","1024x768","1280x800","1280x960","1680x1050","1600x1200")
 		self.box.current(0)
 		self.box.bind("<<ComboboxSelected>>", self.handle_drop_down_selection)
-		self.box.grid(row=1,column=1)
+		self.box.grid(row=1,column=0)
 		self.resizeBtn = Button(text="Resize",command=self.resizeImages).grid(row=99,column=99,padx=5,pady=5,ipadx=5,ipady=2)
 	def handle_drop_down_selection(self,event):
 		print(self.box.get())
@@ -33,10 +34,27 @@ class Application(Frame):
 		elif self.option.get() == 2:
 			self.box['state'] = DISABLED
 			print('option2')
+	def create_list_box(self):
+		self.lb = Listbox(width = 35)
+		self.lb.drop_target_register(DND_FILES)
+		self.lb.dnd_bind('<<Drop>>', self.drop)
+		self.lb.grid(row=3,padx=10,pady=10,rowspan=1)
+	def drop(self,event):
+		self.returnedFilePaths = event.data
+		self.filePaths()
+	def filePaths(self):
+	    curr = self.returnedFilePaths[1:-1]
+	    list = curr.split("} {")
+	    self.file_list = self.file_list+list
+	    print(list)
+	    for i in list:
+	        onlyName = i.split("/")[-1]
+	        self.count = self.count+1
+	        self.lb.insert(self.count,onlyName)
 root = TkinterDnD.Tk()
 app = Application(master=root)
 app.master.title("Image Resizer")
-app.master.geometry("250x200")
+app.master.geometry("320x320")
 root.resizable(False,False)
 app.mainloop()
 
