@@ -103,6 +103,8 @@ class Application(Frame):
             print(e)
             #pass
         messagebox.showinfo("My PDF Joiner", "        Done!        ")
+        self.file_list.clear()
+        self.lb.delete('0', 'end')
 
 root = TkinterDnD.Tk()
 app = Application(master=root)

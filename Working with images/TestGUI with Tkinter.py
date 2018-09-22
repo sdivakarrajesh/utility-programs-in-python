@@ -13,6 +13,7 @@ class Application(Frame):
         self.count = 0
         self.res_option = "320x200"
 
+
     def create_widgets(self):
         option1 = Radiobutton(text="PreDefined Resolutions",variable=self.option,value=1,command=self.perspective)
         option1.select()
@@ -34,8 +35,12 @@ class Application(Frame):
         self.box.current(0)
         self.box.bind("<<ComboboxSelected>>", self.handle_drop_down_selection)
         self.box.grid(row=1,column=0)
-        self.frame.grid(row=3, column=0,sticky=W,padx=10, pady=5)
+        self.frame.grid(row=4, column=0,sticky=W,padx=10, pady=5)
         self.resizeBtn = Button(text="Resize",command=self.resizeImages).grid(row=99,column=0,padx=10,pady=5,ipadx=10,ipady=2,sticky=E)
+        self.checkCmd = IntVar()
+        self.checkCmd.set(1)
+        self.aspectRatioCheckBox = Checkbutton(root, variable=self.checkCmd, onvalue=1, offvalue=0, text="Keep Aspect Ratio")
+        self.aspectRatioCheckBox.grid(row=3,column=0,sticky=W,padx=10, pady=5)
         self.perspective()
     def handle_drop_down_selection(self,event):
         self.res_option = self.box.get()
@@ -52,13 +57,17 @@ class Application(Frame):
             print(aspect_ratio)
             extension = "jpg"
             width,height = self.res_option.split('x')
-            height = int(width) / float(aspect_ratio)
+            if self.checkCmd.get() == 1:
+                height = int(width) / float(aspect_ratio)
             finalImage = imgFile.resize((int(width), int(height)), PIL.Image.ANTIALIAS)
             finalName = i
             fileName, temp = finalName.rsplit(".", maxsplit=1)
             res = str(int(width)) + "x" + str(int(height))
             finalName = finalName + res
             finalImage.save(finalName+"."+extension)
+            self.lb.delete('0', 'end')
+            self.file_list.clear()
+
 
     def perspective(self):
         if self.option.get() == 1:
