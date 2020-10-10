@@ -2,7 +2,7 @@ import os
 import json
 from pathlib import Path, PurePath
 
-STATE_FILE = ".write_queue.json"
+STATE_FILE = ".optimize_queue.json"
 
 def save_state_to_file(commands):
     with open(STATE_FILE, "w") as f:
@@ -16,10 +16,10 @@ def get_commands_queue():
         state_file_contents = json.loads(f.read())
         return state_file_contents['commands']
 
-def setup_resize_list():
+def setup_optimize_list():
     commands_queue = get_command_list()
     save_state_to_file(commands_queue)
-    # complete_task()
+    complete_task()
 
 
 def complete_task():
@@ -31,17 +31,17 @@ def complete_task():
 
 
 def get_command_list():
-    resize_Command_list = []
+    optimize_Command_list = []
     queue = []
     cwd = '.'
     for root, dirs, files in os.walk(cwd):
         for name in dirs:
             queue.append(name)
     # print(queue)
-    p = Path("./resized")
+    p = Path("./optimized")
     p.mkdir(parents=True, exist_ok=True)
     for item in queue:
-        if item == 'resized':
+        if item == 'optimized':
             continue
         print("Looking in folder ", item)
         new_p = Path(PurePath.joinpath(p, item))
@@ -55,13 +55,12 @@ def get_command_list():
                     # Path.touch(new_f, exist_ok=True)
                     command = """ffmpeg -i '%s' -vcodec libx265 -crf 28 -preset fast '%s'""" % (org_f, new_f)
                     # print(command)
-                    resize_Command_list.append(command)
-                    # os.system(command)
-    return resize_Command_list
+                    optimize_Command_list.append(command)
+    return optimize_Command_list
     
 
 if __name__ == '__main__':
     if os.path.isfile(STATE_FILE):
         complete_task()
     else:
-        setup_resize_list()
+        setup_optimize_list()
