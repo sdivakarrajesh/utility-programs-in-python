@@ -16,6 +16,10 @@ A utility script that goes through all the folders in current working directory 
 - it will keep track of all the tasks in a queue and write them to a file called '.optimize_queue.json' in the folder where its run, so you can always stop the program and continue where you left off
 - The optimized videos will be in H.265 codec inside the 'optimized' folder
 
+## Similar Tools
+
+There are plenty of tools that can achieve similar/better results. Take a look at [HandBrake](https://handbrake.fr/).
+
 # License 
 
 Copyright 2020 DIVAKAR RAJESH S
