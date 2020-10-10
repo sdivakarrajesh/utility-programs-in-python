@@ -53,7 +53,7 @@ def get_command_list():
                     new_f = PurePath.joinpath(new_p, name)
                     # print("video: "+new_f)
                     # Path.touch(new_f, exist_ok=True)
-                    command = """ffmpeg -i '%s' -vcodec libx265 -crf 28 -preset fast '%s'""" % (org_f, new_f)
+                    command = """ffmpeg -i '%s' -vcodec libx265 -crf 28 '%s'""" % (org_f, new_f)
                     # print(command)
                     optimize_Command_list.append(command)
     return optimize_Command_list
